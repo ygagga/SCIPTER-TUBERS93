@@ -31,12 +31,3 @@ PlayerSection:NewButton("Inf Jumps", "Enables Inf Jumps", function()
 end)
 
 
-local Tabs = {
-    Main = Window:AddTab({ Title = "Test" }),
-    Settings = Window:AddTab({ Title = "Settings", Icon = "settings" })
-
-    
-}
-
-
-Tabs.Main:AddButton({ Title = "test", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/ygagga/ESP-NAME-kkkk/refs/heads/main/README.md"))() end }
