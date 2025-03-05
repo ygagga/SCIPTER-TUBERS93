@@ -30,6 +30,13 @@ PlayerSection:NewButton("Inf Jumps", "Enables Inf Jumps", function()
     end)
 end)
 
--- Aba ESP
-local ESP = Window:NewTab("ESP")
-local ESPSection = ESP:NewSection("ESP NAME",Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/ygagga/ESP-NAME-kkkk/refs/heads/main/README.md"))() end })
+
+local Tabs = {
+    Main = Window:AddTab({ Title = "Test" }),
+    Settings = Window:AddTab({ Title = "Settings", Icon = "settings" })
+
+    
+}
+
+
+Tabs.Main:AddButton({ Title = "test", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/ygagga/ESP-NAME-kkkk/refs/heads/main/README.md"))() end }
