@@ -32,6 +32,4 @@ end)
 
 -- Aba ESP
 local ESP = Window:NewTab("ESP")
-local ESPSection = ESP:NewSection("ESP")
-
-ESPSection:AddButton({ Title = "ESP NAME", Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/ygagga/ESP-NAME-kkkk/refs/heads/main/README.md"))() end })
+local ESPSection = ESP:NewSection("ESP NAME",Callback = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/ygagga/ESP-NAME-kkkk/refs/heads/main/README.md"))() end })
