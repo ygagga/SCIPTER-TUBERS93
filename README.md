@@ -1,64 +1,65 @@
--- Carregar a Orion Library
-local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/jensonhirst/Orion/main/source')))()
 
--- Criar a Janela Principal
 local Window = OrionLib:MakeWindow({
-    Name = "👾 ZenithCore - Troll 👾",
+    Name = "Troll Hub - Kill All",
     HidePremium = false,
-    SaveConfig = true,
-    ConfigFolder = "ZenithCore"
+    SaveConfig = false,
+    ConfigFolder = "TrollHub"
 })
 
--- Criar a Aba de Troll
-local TrollTab = Window:MakeTab({
-    Name = "Troll",
-    Icon = "rbxassetid://4483362458",
+local Tab = Window:MakeTab({
+    Name = "Kill All",
+    Icon = "rbxassetid://14265681361",
     PremiumOnly = false
 })
 
--- Criar a Seção de Kill All
-TrollTab:AddSection({
-    Name = "Kill All"
-})
-
-local Players = game:GetService("Players")
-local LocalPlayer = Players.LocalPlayer
-
-function KillPlayer(target)
-    if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
-        -- Pegar um sofá automaticamente
-        local args = {
-            [1] = "Give",
-            [2] = "Couch"
-        }
-        game:GetService("ReplicatedStorage"):FindFirstChild("Interaction"):FireServer(unpack(args))
-
-        task.wait(0.5) -- Pequeno delay para garantir que o sofá foi pego
-
-        -- Pegar o alvo com o sofá
-        local humanoidRoot = target.Character:FindFirstChild("HumanoidRootPart")
-        if humanoidRoot then
-            humanoidRoot.CFrame = CFrame.new(0, -500, 0) -- Joga no Void
-        end
-    end
-end
-
-function KillAll()
-    for _, target in pairs(Players:GetPlayers()) do
-        if target ~= LocalPlayer then
-            KillPlayer(target)
-            task.wait(0.5) -- Pequeno delay para não bugar
-        end
-    end
-end
-
--- Botão de Kill All
-TrollTab:AddButton({
-    Name = "Executar Kill All ☠️",
+Tab:AddButton({
+    Name = "Ativar Kill All",
     Callback = function()
-        KillAll()
+        local Players = game:GetService("Players")
+        local LocalPlayer = Players.LocalPlayer
+        local Backpack = LocalPlayer:FindFirstChild("Backpack")
+        
+        if not Backpack then
+            OrionLib:MakeNotification({
+                Name = "Erro!",
+                Content = "Mochila não encontrada!",
+                Time = 3
+            })
+            return
+        end
+        
+        -- Função para spawnar e usar o sofá automaticamente
+        local function SpawnSofa()
+            game:GetService("ReplicatedStorage").Events.GiveTool:InvokeServer("Sofa")
+            task.wait(0.5)
+            local Sofa = Backpack:FindFirstChild("Sofa") or LocalPlayer.Character:FindFirstChild("Sofa")
+            return Sofa
+        end
+
+        for _, Target in pairs(Players:GetPlayers()) do
+            if Target ~= LocalPlayer and Target.Character then
+                local HumanoidRootPart = Target.Character:FindFirstChild("HumanoidRootPart")
+                if HumanoidRootPart then
+                    local Sofa = SpawnSofa()
+                    if Sofa then
+                        Sofa.Parent = LocalPlayer.Character
+                        task.wait(0.3)
+                        -- Teleporta o jogador para o void e depois solta
+                        HumanoidRootPart.CFrame = CFrame.new(0, -500, 0)
+                        task.wait(0.5)
+                        Sofa.Parent = Backpack
+                    end
+                end
+            end
+        end
+        
+        OrionLib:MakeNotification({
+            Name = "Kill All!",
+            Content = "Todos os jogadores foram eliminados!",
+            Time = 5
+        })
     end
 })
 
--- Finalizar e exibir GUI
 OrionLib:Init()
